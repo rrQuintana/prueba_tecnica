@@ -2,6 +2,8 @@
 
 Este repositorio contiene el código del backend de la aplicación. La base de datos está alojada en línea, por lo que no es necesario realizar ninguna configuración adicional.
 
+El backend de la aplicación corre en el puerto 3000 por defecto. Puedes acceder a las rutas desde http://localhost:3000/api/...
+
 ## Instalación
 
 Para instalar las dependencias, ejecuta el siguiente comando:
