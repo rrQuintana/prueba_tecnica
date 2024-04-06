@@ -19,9 +19,25 @@ class UserService {
     return user;
   }
 
-  async findAll() {
-    const users = await this.User.findAll();
-    return users;
+  async findPaginatedUsers (startIndex, pageSize) {
+    try {
+      const users = await this.User.findAll({
+        offset: startIndex,
+        limit: pageSize,
+      });
+      return users;
+    } catch (error) {
+      throw new Error('Error al buscar usuarios paginados: ' + error.message);
+    }
+  }
+
+  async countAll() {
+    try {
+      const totalUsers = await this.User.count();
+      return totalUsers;
+    } catch (error) {
+      throw new Error('Error al contar usuarios: ' + error.message);
+    }
   }
 
   async findOne(id) {

@@ -29,6 +29,8 @@ class LoginService {
       process.env.JWT_SECRET
     );
 
+    const roleName = user.roleId === 1 ? "Admin" : "User";
+
     const respose = {
       token,
       user: {
@@ -39,6 +41,7 @@ class LoginService {
         phoneNumber: user.phoneNumber,
         dateOfBirth: user.dateOfBirth,
         roleId: user.roleId,
+        roleName: roleName,
       },
     };
 
