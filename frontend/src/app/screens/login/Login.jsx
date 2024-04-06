@@ -1,6 +1,6 @@
 function Login() {
   return (
-    <div>Login</div>
+    <div className="flex flex-1 bg-red-500">Login</div>
   )
 }
 

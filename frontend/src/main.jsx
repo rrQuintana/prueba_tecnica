@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './app/App.jsx'
-import './assets/index.css'
 import { Provider } from 'react-redux'
+import './assets/index.css'
 
 import { QueryClient, QueryClientProvider } from 'react-query'
 import store from './app/logic/store.js'
