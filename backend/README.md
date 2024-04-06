@@ -25,3 +25,13 @@ Para ejecutar el servidor en modo de desarrollo, utiliza el siguiente comando:
 Este comando iniciará el servidor y estará listo para recibir solicitudes.
 
 ¡Listo! Ahora estás listo para utilizar el backend de la aplicación.
+
+Las credenciales de usuario administrador son las siguientes:
+
+- Usuario: example1@example.com
+- Contraseña: password123
+
+Y las credenciales de usuario normal son las siguientes:
+
+- Usuario: example2@example.com
+- Contraseña: password123
