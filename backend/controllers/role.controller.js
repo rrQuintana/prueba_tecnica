@@ -26,6 +26,11 @@ const deleteRole = async (req, res, next) => {
   res.json(role);
 }
 
+const getRoleByName = async (name) => {
+  const role = await roleService.findByName(name);
+  return role;
+}
+
 module.exports = {
   createRole,
   getRoles,

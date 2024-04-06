@@ -1,5 +1,6 @@
-const logger = require('./logger')
+require('dotenv').config()
 const jwt = require('jsonwebtoken')
+const Role = require('../models/role.model')
 
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
@@ -31,8 +32,33 @@ const tokenExtractor = (req, res, next) => {
   next();
 }
 
+const permissionExtractor = async (req, res, next) => {
+  const authorization = req.get('authorization');
+
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    const token = authorization.substring(7);
+
+    try {
+      const decodedToken = jwt.verify(token, process.env.JWT_SECRET);      
+
+      if (decodedToken.roleId !== 1) {
+        return res.status(403).json({ error: 'permission denied' });
+      }
+
+    } catch (error) {
+      return res.status(401).json({ error: error.message });
+    }
+  } else {
+    return res.status(401).json({ error: 'token missing' });
+  }
+
+  next();
+}
+
+
 module.exports = {
+  permissionExtractor,
   unknownEndpoint,
   errorHandler,
-  tokenExtractor
+  tokenExtractor,
 }
