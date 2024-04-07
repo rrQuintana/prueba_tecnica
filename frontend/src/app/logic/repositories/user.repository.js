@@ -10,7 +10,7 @@ const getAllUsers = async (params) => {
 }
 
 const createUser = async (data) => {
-  const response = await axios.post(`${api_base_url}/api/users`, data, {
+  const response = await axios.post(`${api_base_url}/users`, data, {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -19,7 +19,7 @@ const createUser = async (data) => {
 }
 
 const updateUser = async (id, data) => {
-  const response = await axios.put(`${api_base_url}/api/users/${id}`, data, {
+  const response = await axios.put(`${api_base_url}/users/${id}`, data, {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -28,7 +28,7 @@ const updateUser = async (id, data) => {
 }
 
 const deleteUser = async (id) => {
-  const response = await axios.delete(`${api_base_url}/api/users/${id}`, {
+  const response = await axios.delete(`${api_base_url}/users/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`
     }
