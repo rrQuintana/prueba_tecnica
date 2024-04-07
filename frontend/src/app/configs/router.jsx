@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import Login from "../screens/login/Login";
 import Home from "../screens/home/Home";
 import Error404 from "../Error404";
+import FormUsers from "../screens/home/FormUsers";
 
 const ProtectedRoute = ({ user, element }) => {
   return user ? element : <Navigate replace to="/login" />
@@ -26,7 +27,7 @@ const Router = () => {
         <Route path="/" element={<ProtectedRoute user={user} element={<Home />} />} />
       
         {/*Admin routes */}
-        <Route path="/admin" element={<PrivateRoute user={user} element={<Home />} />} />
+        <Route path="/form-users" element={<PrivateRoute user={user} element={<FormUsers />} />} />
 
       </Routes>
     </BrowserRouter>
