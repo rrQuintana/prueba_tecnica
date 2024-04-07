@@ -7,6 +7,12 @@ const createUser = async (req, res) => {
   res.json(user);
 };
 
+const getAllUsers = async (req, res) => {
+  const users = await userService.findAll();
+  res.json(users);
+};
+
+// Retrieves paginated users from the database and sends the response as JSON.
 const getUsers = async (req, res, next) => {
   try {
     const page = req.query.page ? parseInt(req.query.page, 10) : 1;
@@ -20,7 +26,6 @@ const getUsers = async (req, res, next) => {
 
     const users = await userService.findPaginatedUsers(startIndex, pageSize);
 
-    // Construimos la respuesta paginada
     const response = {
       page,
       totalPages,
@@ -52,6 +57,7 @@ const deleteUser = async (req, res) => {
 
 module.exports = {
   createUser,
+  getAllUsers,
   getUsers,
   getUser,
   updateUser,

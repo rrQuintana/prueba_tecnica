@@ -1,11 +1,24 @@
+/**
+ * Servicio que gestiona las operaciones relacionadas con los usuarios.
+ * @module services/UserService
+ */
+
 const bcrypt = require('bcrypt');
 const User = require('../models/user.model');
 const Role = require('../models/role.model');
 
+/**
+ * Clase que representa el servicio de usuarios.
+ * @name UserService
+ */
 class UserService {
+  /**
+   * Crea una instancia del servicio de usuarios.
+   * @constructor
+   */
   constructor() {
-    this.User = User;
-    this.Role = Role;
+    this.User = User; // Modelo de usuario
+    this.Role = Role; // Modelo de rol
   }
 
   async create(data) {
@@ -21,11 +34,33 @@ class UserService {
     return user;
   }
 
+  async findAll() {
+    const users = await this.User.findAll({
+      include: {
+        model: this.Role,
+        as: 'Role',
+        attributes: ['name'],
+        foreignKey: 'roleId',
+      },
+    });
+    return users;
+  }
+
+  /**
+   * Encuentra usuarios paginados según el índice de inicio y el tamaño de la página.
+   * @async
+   * @method findPaginatedUsers
+   * @param {number} startIndex - Índice de inicio de la paginación.
+   * @param {number} pageSize - Tamaño de la página.
+   * @returns {Promise<Array>} - Promesa que resuelve con los usuarios paginados.
+   * @throws {Error} - Error lanzado si hay problemas al buscar usuarios paginados.
+   */
   async findPaginatedUsers(startIndex, pageSize) {
     try {
       const users = await this.User.findAll({
         offset: startIndex,
         limit: pageSize,
+        order: [['id', 'ASC']],
         include: {
           model: this.Role,
           as: 'Role',

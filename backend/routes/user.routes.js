@@ -7,6 +7,7 @@ const middleware = require('../utils/middleware');
 userRouter
   .post('/', userController.createUser)
   .get('/', userController.getUsers)
+  .get('/all', userController.getAllUsers)
   .get('/:id', userController.getUser)
   .put('/:id', middleware.permissionExtractor, userController.updateUser)
   .delete('/:id', middleware.permissionExtractor, userController.deleteUser);

@@ -1,10 +1,19 @@
-require('dotenv').config();
+/* eslint-disable consistent-return */
+/**
+ * Middleware y funciones de utilidad relacionadas con la autenticación y la autorización.
+ * @module utils/authMiddleware
+ */
+
 const jwt = require('jsonwebtoken');
 const Role = require('../models/role.model');
 const logger = require('./logger');
 
 let adminRole = null;
 
+/**
+ * Busca el rol de administrador y lo asigna a la variable `adminRole`.
+ * Si el rol no se encuentra, registra un error en el registro.
+ */
 Role.findOne({ where: { name: 'Admin' } })
   .then((role) => {
     if (role) {
@@ -17,11 +26,24 @@ Role.findOne({ where: { name: 'Admin' } })
     logger.error(error.message);
   });
 
+/**
+ * Manejador de solicitudes para endpoints desconocidos (404 Not Found).
+ * @function unknownEndpoint
+ * @param {object} request - Objeto de solicitud HTTP.
+ * @param {object} response - Objeto de respuesta HTTP.
+ */
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' });
 };
 
-// eslint-disable-next-line consistent-return
+/**
+ * Manejador de errores para diferentes tipos de errores comunes.
+ * @function errorHandler
+ * @param {Error} err - Objeto de error.
+ * @param {object} req - Objeto de solicitud HTTP.
+ * @param {object} res - Objeto de respuesta HTTP.
+ * @param {function} next - Función para llamar al siguiente middleware.
+ */
 const errorHandler = (err, req, res, next) => {
   switch (err.name) {
     case 'CastError':
@@ -40,6 +62,13 @@ const errorHandler = (err, req, res, next) => {
   next(err);
 };
 
+/**
+ * Middleware para extraer el token de autorización de la solicitud.
+ * @function tokenExtractor
+ * @param {object} req - Objeto de solicitud HTTP.
+ * @param {object} res - Objeto de respuesta HTTP.
+ * @param {function} next - Función para llamar al siguiente middleware.
+ */
 const tokenExtractor = (req, res, next) => {
   const authorization = req.get('authorization');
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
@@ -48,7 +77,14 @@ const tokenExtractor = (req, res, next) => {
   next();
 };
 
-// eslint-disable-next-line consistent-return
+/**
+ * Middleware para extraer y verificar los permisos de un token JWT.
+ * @async
+ * @function permissionExtractor
+ * @param {object} req - Objeto de solicitud HTTP.
+ * @param {object} res - Objeto de respuesta HTTP.
+ * @param {function} next - Función para llamar al siguiente middleware.
+ */
 const permissionExtractor = async (req, res, next) => {
   const authorization = req.get('authorization');
 
