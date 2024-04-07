@@ -4,11 +4,19 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import { Button, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import useDeleteUser from '../../../logic/hooks/useDeleteUser';
 
-export default function DeleteModal({ user }) {
+export default function DeleteModal({ user, refetch }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const { deleteUser, isLoading } = useDeleteUser(refetch);
+
+  const handleDelete = async () => {
+    await deleteUser(user.id);
+    handleClose();
+  }
 
   return (
     <React.Fragment>
@@ -37,7 +45,7 @@ export default function DeleteModal({ user }) {
               ¿Estás seguro de que deseas eliminar a {user.firstName} {user.lastName}?
             </p>
             <div className='flex flex-row justify-around'>
-              <Button variant="contained" color="error" onClick={handleClose}>Eliminar</Button>
+              <Button variant="contained" color="error" onClick={handleDelete}>{isLoading ? "Eliminando...":"Eliminar"}</Button>
               <Button variant="contained" color="grey" onClick={handleClose}>Cancelar</Button>
             </div>
           </div>
