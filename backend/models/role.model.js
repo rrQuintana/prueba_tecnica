@@ -1,19 +1,8 @@
-const { Model, DataTypes } = require('sequelize');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../utils/sequelize');
+const User = require('./user.model');
 
-const ROLES_TABLE = 'roles';
-
-class Role extends Model {
-  static config(sequelize) {
-    return {
-      sequelize,
-      tableName: ROLES_TABLE,
-      modelName: 'Role',
-      timestamps: true,
-    };
-  }
-}
-
-const roleSchema = {
+const Role = sequelize.define('Role', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -26,7 +15,21 @@ const roleSchema = {
   description: {
     type: DataTypes.STRING,
     allowNull: false,
-  }
-};
+  },
+}, {
+  sequelize,
+  modelName: 'roles',
+  timestamps: false,
+});
 
-module.exports = { Role, roleSchema };
+Role.hasMany(User, {
+  foreignKey: 'roleId',
+  sourceKey: 'id',
+});
+
+User.belongsTo(Role, {
+  foreignKey: 'roleId',
+  targetId: 'id',
+});
+
+module.exports = Role;

@@ -1,18 +1,19 @@
-var morgan = require("./utils/config/morgan.js");
-const express = require("express");
-require("express-async-errors");
+const cors = require('cors');
+const express = require('express');
+const morgan = require('./utils/config/morgan');
+require('express-async-errors');
+
 const app = express();
-const cors = require("cors");
-const routerApi = require("./routes/index.routes");
+const routerApi = require('./routes/index.routes');
 
-const middleware = require("./utils/middleware");
+const middleware = require('./utils/middleware');
 
-app.use(morgan(":statusColor :method :url :body :response-time ms"));
+app.use(morgan(':statusColor :method :url :body :response-time ms'));
 
 app.use(cors());
 app.use(express.json());
 
-routerApi(app)
+routerApi(app);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);

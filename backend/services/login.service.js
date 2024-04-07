@@ -1,6 +1,6 @@
-const { models } = require("../utils/sequelize");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const { models } = require('../utils/sequelize');
 
 class LoginService {
   constructor() {
@@ -17,19 +17,19 @@ class LoginService {
     });
 
     const isPasswordMatch = user === null
-    ? false 
-    : await bcrypt.compare(password, user.password);
+      ? false
+      : await bcrypt.compare(password, user.password);
 
     if (!isPasswordMatch) {
-      throw new Error("Invalid password");
+      throw new Error('Invalid password');
     }
 
     const token = jwt.sign(
-      { id: user.id, roleId: user.roleId }, 
-      process.env.JWT_SECRET
+      { id: user.id, roleId: user.roleId },
+      process.env.JWT_SECRET,
     );
 
-    const roleName = user.roleId === 1 ? "Admin" : "User";
+    const roleName = user.roleId === 1 ? 'Admin' : 'User';
 
     const respose = {
       token,
@@ -41,7 +41,7 @@ class LoginService {
         phoneNumber: user.phoneNumber,
         dateOfBirth: user.dateOfBirth,
         roleId: user.roleId,
-        roleName: roleName,
+        roleName,
       },
     };
 

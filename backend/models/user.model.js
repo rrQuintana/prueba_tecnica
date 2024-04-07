@@ -1,23 +1,11 @@
-const { Model, DataTypes } = require('sequelize');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../utils/sequelize');
 
-const USERS_TABLE = 'users';
-
-class User extends Model {
-  static config(sequelize) {
-    return {
-      sequelize,
-      tableName: USERS_TABLE,
-      modelName: 'User',
-      timestamps: true,
-    };
-  }
-}
-
-const userSchema = {
+const User = sequelize.define('User', {
   id: {
     type: DataTypes.INTEGER,
-    autoIncrement: true,
     primaryKey: true,
+    autoIncrement: true,
   },
   firstName: {
     type: DataTypes.STRING,
@@ -49,9 +37,13 @@ const userSchema = {
     allowNull: false,
     references: {
       model: 'roles',
-      key: 'id'
-    }
-  }
-};
+      key: 'id',
+    },
+  },
+}, {
+  sequelize,
+  modelName: 'users',
+  timestamps: false,
+});
 
-module.exports = { User, userSchema };
+module.exports = User;

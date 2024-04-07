@@ -1,5 +1,6 @@
-const { User } = require('../../models/user.model');
 const bcrypt = require('bcrypt');
+const logger = require('../logger');
+const User = require('../../models/user.model');
 
 const saltRounds = 10;
 
@@ -15,7 +16,7 @@ const users = [
     phoneNumber: '1234567890',
     password: hashPassword('password123'),
     dateOfBirth: '1990-01-01',
-    roleId: 1 // Admin
+    roleId: 1, // Admin
   },
   {
     firstName: 'Jane',
@@ -24,7 +25,7 @@ const users = [
     phoneNumber: '9876543210',
     password: hashPassword('password123'),
     dateOfBirth: '1995-05-05',
-    roleId: 2 // User
+    roleId: 2, // User
   },
   {
     firstName: 'Dummy',
@@ -33,7 +34,7 @@ const users = [
     phoneNumber: '9876543210',
     password: hashPassword('password123'),
     dateOfBirth: '1995-05-05',
-    roleId: 2 // User
+    roleId: 2, // User
   },
   {
     firstName: 'Dummy',
@@ -42,7 +43,7 @@ const users = [
     phoneNumber: '9876543210',
     password: hashPassword('password123'),
     dateOfBirth: '1995-05-05',
-    roleId: 2 // User
+    roleId: 2, // User
   },
   {
     firstName: 'Dummy',
@@ -51,7 +52,7 @@ const users = [
     phoneNumber: '9876543210',
     password: hashPassword('password123'),
     dateOfBirth: '1995-05-05',
-    roleId: 2 // User
+    roleId: 2, // User
   },
   {
     firstName: 'Dummy',
@@ -60,7 +61,7 @@ const users = [
     phoneNumber: '9876543210',
     password: hashPassword('password123'),
     dateOfBirth: '1995-05-05',
-    roleId: 2 // User
+    roleId: 2, // User
   },
   {
     firstName: 'Dummy',
@@ -69,7 +70,7 @@ const users = [
     phoneNumber: '9876543210',
     password: hashPassword('password123'),
     dateOfBirth: '1995-05-05',
-    roleId: 2 // User
+    roleId: 2, // User
   },
   {
     firstName: 'Dummy',
@@ -78,7 +79,7 @@ const users = [
     phoneNumber: '9876543210',
     password: hashPassword('password123'),
     dateOfBirth: '1995-05-05',
-    roleId: 2 // User
+    roleId: 2, // User
   },
   {
     firstName: 'Dummy',
@@ -87,7 +88,7 @@ const users = [
     phoneNumber: '9876543210',
     password: hashPassword('password123'),
     dateOfBirth: '1995-05-05',
-    roleId: 2 // User
+    roleId: 2, // User
   },
   {
     firstName: 'Dummy',
@@ -96,7 +97,7 @@ const users = [
     phoneNumber: '9876543210',
     password: hashPassword('password123'),
     dateOfBirth: '1995-05-05',
-    roleId: 2 // User
+    roleId: 2, // User
   },
   {
     firstName: 'Dummy',
@@ -105,7 +106,7 @@ const users = [
     phoneNumber: '9876543210',
     password: hashPassword('password123'),
     dateOfBirth: '1995-05-05',
-    roleId: 2 // User
+    roleId: 2, // User
   },
   {
     firstName: 'Dummy',
@@ -114,7 +115,7 @@ const users = [
     phoneNumber: '9876543210',
     password: hashPassword('password123'),
     dateOfBirth: '1995-05-05',
-    roleId: 2 // User
+    roleId: 2, // User
   },
   {
     firstName: 'Dummy',
@@ -123,7 +124,7 @@ const users = [
     phoneNumber: '9876543210',
     password: hashPassword('password123'),
     dateOfBirth: '1995-05-05',
-    roleId: 2 // User
+    roleId: 2, // User
   },
   {
     firstName: 'Dummy',
@@ -132,7 +133,7 @@ const users = [
     phoneNumber: '9876543210',
     password: hashPassword('password123'),
     dateOfBirth: '1995-05-05',
-    roleId: 2 // User
+    roleId: 2, // User
   },
   {
     firstName: 'Dummy',
@@ -141,21 +142,17 @@ const users = [
     phoneNumber: '9876543210',
     password: hashPassword('password123'),
     dateOfBirth: '1995-05-05',
-    roleId: 2 // User
-  }
+    roleId: 2, // User
+  },
 ];
-
 
 async function seedUsers() {
   try {
     await User.sync({ force: true });
-
-    await User.truncate({ cascade: true });
     await User.bulkCreate(users);
-
-    console.log('Usuarios sembrados correctamente');
+    logger.info('Usuarios sembrados correctamente');
   } catch (error) {
-    console.error('Error al sembrar usuarios:', error);
+    logger.error('Error al sembrar usuarios:', error);
   }
 }
 

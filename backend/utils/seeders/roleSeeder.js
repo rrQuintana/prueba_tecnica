@@ -1,4 +1,5 @@
-const { Role } = require('../../models/role.model');
+const logger = require('../logger');
+const Role = require('../../models/role.model');
 
 const roles = [
   {
@@ -14,13 +15,10 @@ const roles = [
 async function seedRoles() {
   try {
     await Role.sync({ force: true });
-    
-    await Role.truncate({ cascade: true });
     await Role.bulkCreate(roles);
-
-    console.log('Roles sembrados correctamente');
+    logger.info('Roles sembrados correctamente');
   } catch (error) {
-    console.error('Error al sembrar roles:', error);
+    logger.error('Error al sembrar roles:', error);
   }
 }
 

@@ -1,39 +1,26 @@
-const { Sequelize } = require('sequelize');
 require('dotenv').config();
 const seedRoles = require('./seeders/roleSeeder');
 const seedUsers = require('./seeders/userSeeder');
-const initModels = require('../models');
+const sequelize = require('./sequelize');
+const logger = require('./logger');
 
 async function runSeeder() {
   try {
-
-    const sequelize = new Sequelize(process.env.DATABASE_URL, {
-      dialect: 'postgres',
-      dialectOptions: {
-        ssl: {
-          require: true,
-          rejectUnauthorized: false
-        }
-      }
-    });
-
-
     await sequelize.sync({ force: true });
-    console.log('Todas las tablas sincronizadas correctamente');
-
-    await initModels(sequelize)
+    logger.info('Todas las tablas sincronizadas correctamente');
 
     await seedRoles();
-    await seedUsers();
+    logger.info('Roles insertados correctamente');
 
-    console.log('Seeders insertados correctamente');
+    await seedUsers();
+    logger.info('Usuarios insertados correctamente');
 
     await sequelize.close();
-    console.log('Conexión cerrada correctamente');
+    logger.info('Conexión cerrada correctamente');
 
     process.exit(0);
   } catch (error) {
-    console.error('Error al ejecutar el seeder:', error);
+    logger.error('Error en el seeder:', error);
     process.exit(1);
   }
 }
