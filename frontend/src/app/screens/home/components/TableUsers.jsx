@@ -11,7 +11,7 @@ const TableCellHeader = ({ children }) => {
   )
 }
 
-function TableUsers({ rol, usersData, isLoading, handlePageChange }) {
+function TableUsers({ rol, usersData, isLoading, handlePageChange, refetch }) {
   const { page, totalPages, users } = usersData;
 
   return (
@@ -66,7 +66,7 @@ function TableUsers({ rol, usersData, isLoading, handlePageChange }) {
                   rol === 'Admin' && (
                     <>
                       <TableCell className="space-x-5">
-                        <DeleteModal user={user} />
+                        <DeleteModal user={user} refetch={refetch} />
                         <IconButton aria-label="edit" color="primary">
                           <EditIcon />
                         </IconButton>
