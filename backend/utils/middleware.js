@@ -37,32 +37,6 @@ const unknownEndpoint = (request, response) => {
 };
 
 /**
- * Manejador de errores para diferentes tipos de errores comunes.
- * @function errorHandler
- * @param {Error} err - Objeto de error.
- * @param {object} req - Objeto de solicitud HTTP.
- * @param {object} res - Objeto de respuesta HTTP.
- * @param {function} next - Función para llamar al siguiente middleware.
- */
-const errorHandler = (err, req, res, next) => {
-  switch (err.name) {
-    case 'CastError':
-      return res.status(400).send({ error: 'malformatted id' });
-    case 'ValidationError':
-      return res.status(400).json({ error: err.message });
-    case 'JsonWebTokenError':
-      return res.status(401).json({ error: 'invalid token' });
-    case 'TokenExpiredError':
-      return res.status(401).json({ error: 'token expired' });
-    default:
-      res.status(500).send({ error: err.message });
-      break;
-  }
-
-  next(err);
-};
-
-/**
  * Middleware para extraer el token de autorización de la solicitud.
  * @function tokenExtractor
  * @param {object} req - Objeto de solicitud HTTP.
@@ -105,6 +79,35 @@ const permissionExtractor = async (req, res, next) => {
   }
 
   next();
+};
+
+/**
+ * Manejador de errores para diferentes tipos de errores comunes.
+ * @function errorHandler
+ * @param {Error} err - Objeto de error.
+ * @param {object} req - Objeto de solicitud HTTP.
+ * @param {object} res - Objeto de respuesta HTTP.
+ * @param {function} next - Función para llamar al siguiente middleware.
+ */
+const errorHandler = (err, req, res, next) => {
+  switch (err.name) {
+    case 'CastError':
+      return res.status(400).send({ error: 'ID mal formateada' });
+    case 'ValidationError':
+      return res.status(400).json({ error: err.message });
+    case 'JsonWebTokenError':
+      return res.status(401).json({ error: 'Token inválido' });
+    case 'TokenExpiredError':
+      return res.status(401).json({ error: 'Sesión expirara' });
+    case 'SequelizeUniqueConstraintError':
+      return res.status(400).json({ error: 'Ya existe una cuenta con ese correo' });
+    case 'Credenciales inválidas':
+      return res.status(401).json({ error: 'Credenciales inválidas' });
+    default:
+      res.status(500).send({ error: err });
+  }
+
+  next(err);
 };
 
 module.exports = {

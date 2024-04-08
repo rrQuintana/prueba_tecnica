@@ -45,7 +45,7 @@ class LoginService {
 
     // Lanza un error si las credenciales son inválidas
     if (!isPasswordMatch) {
-      throw new Error('Invalid password');
+      throw new Error('Credenciales inválidas');
     }
 
     // Genera un token JWT utilizando el ID de usuario y el ID de rol
