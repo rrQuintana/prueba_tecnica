@@ -27,7 +27,8 @@ const Router = () => {
         <Route path="/" element={<ProtectedRoute user={user} element={<Home />} />} />
       
         {/*Admin routes */}
-        <Route path="/form-users" element={<PrivateRoute user={user} element={<FormUsers />} />} />
+        <Route path="/form-users/new" element={<PrivateRoute user={user} element={<FormUsers />} />} />
+        <Route path="/form-users/edit/:id" element={<ProtectedRoute user={user} element={<FormUsers />} />} />
 
       </Routes>
     </BrowserRouter>
