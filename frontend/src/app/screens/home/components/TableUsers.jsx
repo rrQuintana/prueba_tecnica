@@ -2,6 +2,7 @@ import { IconButton, Pagination, Table, TableBody, TableCell, TableContainer, Ta
 import moment from "moment"
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteModal from "./DeleteModal";
+import { useNavigate } from "react-router";
 
 const TableCellHeader = ({ children }) => {
   return (
@@ -13,6 +14,7 @@ const TableCellHeader = ({ children }) => {
 
 function TableUsers({ rol, usersData, isLoading, handlePageChange, refetch }) {
   const { page, totalPages, users } = usersData;
+  const navigation = useNavigate();
 
   return (
     <TableContainer className="bg-white shadow-md">
@@ -67,7 +69,7 @@ function TableUsers({ rol, usersData, isLoading, handlePageChange, refetch }) {
                     <>
                       <TableCell className="space-x-5">
                         <DeleteModal user={user} refetch={refetch} />
-                        <IconButton aria-label="edit" color="primary">
+                        <IconButton onClick={()=>navigation(`/form-users/edit/${user.id}`)} aria-label="edit" color="primary">
                           <EditIcon />
                         </IconButton>
                       </TableCell>

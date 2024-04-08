@@ -2,12 +2,27 @@ import { Controller } from "react-hook-form";
 import { Autocomplete, Button, CircularProgress, TextField } from "@mui/material";
 import useGetRoles from "../../../logic/hooks/useGetRoles";
 import { useNavigate } from "react-router";
+import { useEffect } from "react";
 
-function Form({ control, handleSubmit, errors, onSubmit, isLoading, isEditing, setValue }) {
+function Form({ control, handleSubmit, errors, onSubmit, isLoading, isLoadingUserData, isEditing, user, setValue }) {
   const navigation = useNavigate()
   const { data: roles, isLoading: isLoadingRoles } = useGetRoles()
 
-  if (isLoadingRoles) {
+  useEffect(() => {
+    if (isEditing && !isLoadingUserData && user && !isLoadingRoles) {
+      setValue('id', user.id)
+      setValue('firstName', user.firstName)
+      setValue('lastName', user.lastName)
+      setValue('email', user.email)
+      setValue('phoneNumber', user.phoneNumber)
+      setValue('dateOfBirth', new Date(user.dateOfBirth).toISOString().split('T')[0])
+      setValue('roleId', user.roleId)
+      const role = roles?.find(role => role.id === user.roleId);
+      setValue('role', role);
+    }
+  }, [isLoadingUserData, user, setValue, isEditing, roles, isLoadingRoles])
+
+  if (isLoadingRoles || (isLoadingUserData && isEditing)) {
     return (
       <div className="flex items-center justify-center h-full">
         <CircularProgress />
@@ -79,21 +94,26 @@ function Form({ control, handleSubmit, errors, onSubmit, isLoading, isEditing, s
           />
         )}
       />
-      <Controller
-        name="password"
-        control={control}
-        rules={{ required: 'La contraseña es requerida', minLength: { value: 8, message: 'La contraseña debe tener al menos 8 caracteres' } }}
-        render={({ field }) => (
-          <TextField
-            label="Contraseña"
-            type="password"
-            helperText={errors.password ? errors.password.message : ''}
-            error={!!errors.password}
-            className="w-full"
-            {...field}
-          />
+      <div>
+        <Controller
+          name="password"
+          control={control}
+          rules={isEditing ? {} : { required: 'La contraseña es requerida', minLength: { value: 8, message: 'La contraseña debe tener al menos 8 caracteres' } }}
+          render={({ field }) => (
+            <TextField
+              label="Contraseña"
+              type="password"
+              helperText={errors.password ? errors.password.message : ''}
+              error={!!errors.password}
+              className="w-full"
+              {...field}
+            />
+          )}
+        />
+        {isEditing && (
+          <p className="mb-5 font-light italic text-zinc-500 text-sm">Dejar en blanco no cambiará la contraseña</p>
         )}
-      />
+      </div>
       <div className="flex flex-row space-x-3">
         <Controller
           name="dateOfBirth"
@@ -125,14 +145,15 @@ function Form({ control, handleSubmit, errors, onSubmit, isLoading, isEditing, s
                 <TextField {...params} label="Rol" error={!!errors.role} helperText={errors.role ? errors.role.message : ''} />
               )}
               sx={{ width: "100%" }}
+              value={roles?.find(role => role.id === user.roleId) || null}
               onChange={(_, value) => {
                 field.onChange(value)
                 setValue('roleId', value?.id)
               }}
-              isOptionEqualToValue={(option, value) => option?.id === value?.id}
             />
           )}
         />
+
       </div>
       <div className="flex flex-row justify-end space-x-5">
         <Button type="submit" variant="contained" color="primary">{isLoading ? <CircularProgress size={24} /> : 'Guardar'}</Button>

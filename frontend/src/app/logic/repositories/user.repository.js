@@ -9,6 +9,11 @@ const getAllUsers = async (params) => {
   return response.data
 }
 
+const getUserById = async (id) => {
+  const response = await axios.get(`${api_base_url}/users/${id}`)
+  return response.data
+}
+
 const createUser = async (data) => {
   const response = await axios.post(`${api_base_url}/users`, data, {
     headers: {
@@ -18,8 +23,9 @@ const createUser = async (data) => {
   return response.data
 }
 
-const updateUser = async (id, data) => {
-  const response = await axios.put(`${api_base_url}/users/${id}`, data, {
+const updateUser = async (data) => {
+  console.log(data)
+  const response = await axios.put(`${api_base_url}/users/${data.id}`, data, {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -38,6 +44,7 @@ const deleteUser = async (id) => {
 
 export default {
   getAllUsers,
+  getUserById,
   createUser,
   updateUser,
   deleteUser
