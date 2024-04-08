@@ -10,7 +10,7 @@ function Filters({ filters, setFilters }) {
   if (isLoadingRoles) return <p>Cargando...</p>
 
   return (
-    <div className="flex flex-row space-x-5 w-2/5 items-center">
+    <div className="flex flex-col md:flex-row space-x-5 min-w-2/5 items-center">
       <p>Filtrar: </p>
       <Autocomplete
         label="Rol"

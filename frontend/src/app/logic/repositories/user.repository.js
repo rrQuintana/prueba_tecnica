@@ -10,6 +10,7 @@ const getAllUsers = async (params) => {
 }
 
 const getUserById = async (id) => {
+  if(!id) return Promise.resolve({})
   const response = await axios.get(`${api_base_url}/users/${id}`)
   return response.data
 }

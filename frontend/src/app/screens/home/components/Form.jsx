@@ -31,7 +31,7 @@ function Form({ control, handleSubmit, errors, onSubmit, isLoading, isLoadingUse
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className='w-1/3 m-auto py-3 px-4 space-y-4 overflow-y-auto'>
+    <form onSubmit={handleSubmit(onSubmit)} className='w-full md:w-1/3 m-auto py-3 px-4 space-y-4 overflow-y-auto'>
       <h1 className="text-xl font-semibold">
         {!isEditing ? 'Crear nuevo usuario' : 'Editar usuario'}
       </h1>
@@ -145,7 +145,7 @@ function Form({ control, handleSubmit, errors, onSubmit, isLoading, isLoadingUse
                 <TextField {...params} label="Rol" error={!!errors.role} helperText={errors.role ? errors.role.message : ''} />
               )}
               sx={{ width: "100%" }}
-              value={roles?.find(role => role.id === user.roleId) || null}
+              value={isEditing && roles?.find(role => role.id === user.roleId) || null}
               onChange={(_, value) => {
                 field.onChange(value)
                 setValue('roleId', value?.id)
