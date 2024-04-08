@@ -1,10 +1,11 @@
 import { useSelector } from "react-redux";
 import TableUsers from "./components/TableUsers";
 import useGetUsers from "../../logic/hooks/useGetUsers";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import Layout from "../../shared/Layout";
 import { useNavigate } from 'react-router-dom';
+import Filters from "./components/Filters";
 
 function Home() {
   const user = useSelector(state => state.session.user);
@@ -35,11 +36,14 @@ function Home() {
   return (
     <Layout>
       <div className="px-12 py-6">
-        {user.roleName === 'Admin' && (
-          <div className="flex w-full justify-end mb-4">
-            <Button onClick={()=>navigation('/form-users')} variant="contained" color="primary">Crear usuario</Button>
-          </div>
-        )}
+        <div className="flex w-full justify-between items-center mb-4 border border-transparent border-b-zinc-300 pb-3">
+          <React.Fragment>
+            <Filters filters={filters} setFilters={setFilters} />
+            {user.roleName === 'Admin' && (
+              <Button onClick={() => navigation('/form-users/new')} variant="contained" color="primary">Crear usuario</Button>
+            )}
+          </React.Fragment>
+        </div>
         <TableUsers rol={user.roleName} usersData={usersData} isLoading={isLoading} handlePageChange={handlePageChange} refetch={refetch} />
       </div>
     </Layout>
