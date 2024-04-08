@@ -3,13 +3,12 @@ import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import useCreateUser from "../../logic/hooks/useCreateUser";
 import Form from "./components/Form";
+import useGetUser from "../../logic/hooks/useGetUser";
 
 function FormUsers() {
   const { id } = useParams();
   
-  const isEditing = false
-
-  const { createUser, updateUser, isLoading } = useCreateUser();
+  const isEditing = id ? true : false;
 
   const { control, handleSubmit, formState: { errors }, setError, setValue } = useForm({
     defaultValues:
@@ -24,10 +23,14 @@ function FormUsers() {
     }
   });
 
+  const { data: user, isLoading: isLoadingUserData } = useGetUser(id)  
+  const { createUser, updateUser, isLoading } = useCreateUser(setError);
+
   const onSubmit = async (data) => {
     try {
       if (isEditing) {
-        await updateUser({ ...data, id });
+        console.log(data);
+        await updateUser(data);
       } else {
         console.log(data);
         await createUser(data);
@@ -40,7 +43,7 @@ function FormUsers() {
 
   return (
     <Layout>
-      <Form control={control} handleSubmit={handleSubmit} errors={errors} onSubmit={onSubmit} setValue={setValue} isLoading={isLoading} isEditing={isEditing} />
+      <Form control={control} handleSubmit={handleSubmit} errors={errors} onSubmit={onSubmit} setValue={setValue} isLoading={isLoading} isLoadingUserData={isLoadingUserData} user={user} isEditing={isEditing} />
     </Layout>
   )
 }
