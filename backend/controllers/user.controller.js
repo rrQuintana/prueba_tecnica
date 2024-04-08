@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const UserService = require('../services/user.service');
 
 const userService = new UserService();
@@ -12,19 +13,34 @@ const getAllUsers = async (req, res) => {
   res.json(users);
 };
 
-// Retrieves paginated users from the database and sends the response as JSON.
 const getUsers = async (req, res, next) => {
   try {
     const page = req.query.page ? parseInt(req.query.page, 10) : 1;
     const pageSize = 5;
+    const queryFilters = {};
 
-    const totalUsers = await userService.countAll();
+    if (req.query.role) {
+      queryFilters.roleId = req.query.role;
+    }
+
+    if (req.query.search) {
+      const searchValue = req.query.search.trim();
+
+      queryFilters[Op.or] = [
+        { email: { [Op.iLike]: `%${searchValue}%` } },
+        { firstName: { [Op.iLike]: `%${searchValue}%` } },
+        { lastName: { [Op.iLike]: `%${searchValue}%` } },
+        { phoneNumber: { [Op.iLike]: `%${searchValue}%` } },
+      ];
+    }
+
+    const totalUsers = await userService.countAll(queryFilters);
 
     const totalPages = Math.ceil(totalUsers / pageSize);
 
     const startIndex = (page - 1) * pageSize;
 
-    const users = await userService.findPaginatedUsers(startIndex, pageSize);
+    const users = await userService.findPaginatedUsers(startIndex, pageSize, queryFilters);
 
     const response = {
       page,
